@@ -1,0 +1,16 @@
+# Composer dependencies
+/vendor/
+
+# Environment variables
+.env
+
+# Logs and cache
+*.log
+*.cache
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode settings (optional)
+.vscode/
