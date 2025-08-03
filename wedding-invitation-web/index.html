@@ -26,7 +26,7 @@
   <body>
     <section id="top" class="top w-100 h-100 p-3 mx-auto text-center d-flex justify-content-center align-items-center text-white">
       <main>
-        <h4>Kepada Bapak/Ibu/Saudara/i, </h4>
+        <h4>Kepada <span></span></h4>
         <h1>Nizar D.M. & N. Ichika</h1>
         <p>Akan melangsungkan resepsi pernikahan dalam:</p>
         <div class="simply-countdown"></div>
@@ -107,7 +107,10 @@
           <div class="col-md-8 col-10 text-center">
             <h2>Informasi Acara</h2>
             <p class="alamat">Alamat: Trinity Grand Hotel, <br> Jl. Raya Aspal Hitam No.77, Trinity, Kivotos</p>
-            <a href="https://laravel.com/404" target="_blank" class="btn btn-light btn-sm my-3">Klik untuk membuka peta</a>
+
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7218942.779503378!2d139.11927993343255!3d10.162295237931081!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x67328f3cd57de715%3A0x1bbe64e7a21aa7fc!2sMariana%20Trench!5e0!3m2!1sen!2sid!4v1754205109642!5m2!1sen!2sid" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+            <a href="https://maps.app.goo.gl/Hd1c4mWt9dHjwnjv9" target="_blank" class="btn btn-light btn-sm my-3">Klik untuk membuka peta</a>
             <p class="description">Diharapkan untuk tidak salah alamat dan tanggal. Manakala tiba di tujuan namun tidak ada tanda-tanda sedang dilangsungkan pernikahan, boleh jadi Anda salah jadwal, atau salah tempat.</p>
 
           </div>
@@ -292,6 +295,12 @@
             <button class="btn btn-primary">Kirim</button>
           </div>
         </form>
+
+        <div class="row justify-content-center mt-5">
+          <div class="col-md-6">
+            <!-- embed disqus disini (opsional) -->
+          </div>
+        </div>
       </div>
     </section>
 
@@ -345,6 +354,16 @@
       </div>
     </footer>
 
+    <div id="audio-container">
+      <audio id="music" autoplay loop>
+        <source src="audio/gobun-no-ichi.mp3" type="audio/mp3">
+      </audio>
+
+      <div class="audio-icon-wrapper" style="display: none">
+        <i class="bi bi-disc"></i>
+      </div>
+    </div>
+
     <!-- Bootstrap 5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
@@ -378,12 +397,16 @@
 
     <script>
       const rootElement = document.querySelector(':root');
-        
+      const audioIconWrapper = document.querySelector('.audio-icon-wrapper');
+      const audioIcon = document.querySelector('.audio-icon-wrapper i');
+      const music = document.querySelector('#music');
+      let isPlaying = false;
+      
       function disableScroll() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-        window.onscroll = function() {
+        window.onscroll = () => {
           window.scrollTo(scrollTop, scrollLeft);
         }
         
@@ -393,12 +416,38 @@
       function enableScroll() {
         window.onscroll = function() {}
         rootElement.style.scrollBehavior = 'smooth';
-        localStorage.setItem('opened', 'true');
+        //localStorage.setItem('opened', 'true');
+        playAudio();
       }
 
-      if (!localStorage.getItem('opened')) {
-        disableScroll();
+      function playAudio() {
+        audioIconWrapper.style.display = 'flex';
+
+        music.volume = 0.7;
+        music.play();
+
+        isPlaying = true;
       }
+
+      audioIconWrapper.onclick = () => {
+        if (isPlaying) {
+          music.pause();
+          audioIcon.classList.remove('bi-disc');
+          audioIcon.classList.add('bi-pause-circle');
+        } else {
+          music.play();
+          audioIcon.classList.remove('bi-pause-circle');
+          audioIcon.classList.add('bi-disc');
+        }
+
+        isPlaying = !isPlaying;
+      }
+
+      // if (!localStorage.getItem('opened')) {
+      //   disableScroll();
+      // }
+
+      disableScroll();
     </script>
 
     <script>
@@ -417,6 +466,16 @@
           })
         });
       });
+    </script>
+
+    <script>
+      const namaContainer = document.querySelector('.top h4 span');
+      const urlParams = new URLSearchParams(window.location.search);
+      const pronoun = urlParams.get('p') || 'Bapak/Ibu/Saudara/i';
+      const nama = urlParams.get('n') || '';
+
+      namaContainer.innerHTML = `${pronoun} ${nama},`.replace(/ ,$/, ',');
+      document.querySelector('#nama').value = nama;
     </script>
   </body>
 </html>
